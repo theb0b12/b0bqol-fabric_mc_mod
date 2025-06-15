@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "b0bqol",
+	"version": "${version}",
+	"name": "b0bqol",
+	"description": "b0bqol is a qol mod for this rn",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/b0bqol/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"b0b.b0bqol.B0bqol"
+		],
+		"client": [
+			"b0b.b0bqol.B0bqolClient"
+		],
+		"fabric-datagen": [
+			"b0b.b0bqol.B0bqolDataGenerator"
+		]
+	},
+	"mixins": [
+		"b0bqol.mixins.json",
+		{
+			"config": "b0bqol.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.3",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
