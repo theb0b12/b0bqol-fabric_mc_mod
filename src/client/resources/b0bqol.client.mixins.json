@@ -3,7 +3,7 @@
 	"package": "b0b.b0bqol.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"InteractionManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

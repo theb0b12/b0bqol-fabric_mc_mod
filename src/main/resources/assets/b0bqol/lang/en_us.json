@@ -1,5 +1,9 @@
 
 {
+  "category.b0bqol.general": "b0bqol",
+
   "key.b0bqol.config": "Open Config",
-  "category.b0bqol.general": "b0bqol"
+  "key.b0bqol.entity_config": "Open Entity Config"
+
+
 }
