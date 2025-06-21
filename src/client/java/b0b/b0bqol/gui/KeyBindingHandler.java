@@ -24,8 +24,8 @@ public class KeyBindingHandler {
         entityConfigKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.b0bqol.entity_config", // Translation key
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F10, // Default key: P
-                "category.b0bqol.keybinds" // Category
+                GLFW.GLFW_KEY_F10, // Default key: F10
+                "category.b0bqol.general" // Category
         ));
 
         // Register tick event to check for key presses
