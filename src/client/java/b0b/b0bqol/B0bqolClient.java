@@ -19,7 +19,7 @@ public class B0bqolClient implements ClientModInitializer{
 			// This entrypoint is suitable for setting up client-
 			KeyBindingHandler.initialize();
 			featureList.add(new AutoDownwardHopper());
-			featureList.add(new AutoTopSlab());
+			//featureList.add(new AutoTopSlab());
 
 		}
 }

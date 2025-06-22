@@ -12,13 +12,23 @@ public class ConfigScreen extends Screen {
     private final Screen parent;
     private ButtonWidget AutoDownwardHopperButton;
     private ButtonWidget AutoTopSlabButton;
-    private ButtonWidget hotkeyButton;
+    private ButtonWidget configHotkeyButton;
+    private ButtonWidget entityInfoScreenButton;
     private ButtonWidget doneButton;
 
     // Config values - you might want to move these to a separate config class
     public static boolean AutoDownwardHopperEnabled = true;
     public static boolean AutoTopSlabEnabled = true;
+
+    // Track which button is waiting for input
     private boolean waitingForKeyInput = false;
+    private ButtonType waitingButtonType = ButtonType.NONE;
+
+    private enum ButtonType {
+        NONE,
+        CONFIG_HOTKEY,
+        ENTITY_INFO_HOTKEY
+    }
 
     public ConfigScreen(Text title) {
         this(null, title);
@@ -56,7 +66,7 @@ public class ConfigScreen extends Screen {
                 .build();
         this.addDrawableChild(AutoDownwardHopperButton);
 
-        // AutoTopSlab 2 toggle
+        // AutoTopSlab toggle
         AutoTopSlabButton = ButtonWidget.builder(
                         Text.literal("Auto Top Slab: " + (AutoTopSlabEnabled ? "ON" : "OFF"))
                                 .formatted(AutoTopSlabEnabled ? Formatting.GREEN : Formatting.RED),
@@ -70,17 +80,31 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(AutoTopSlabButton);
 
         // Hotkey change button
-        hotkeyButton = ButtonWidget.builder(
+        configHotkeyButton = ButtonWidget.builder(
                         Text.literal("Config Hotkey: " + KeyBindingHandler.getConfigKeyBinding().getBoundKeyLocalizedText().getString()),
                         button -> {
                             if (!waitingForKeyInput) {
                                 waitingForKeyInput = true;
+                                waitingButtonType = ButtonType.CONFIG_HOTKEY;
                                 updateButtonTexts();
                             }
                         })
                 .dimensions(centerX - buttonWidth/2, startY + spacing * 2, buttonWidth, buttonHeight)
                 .build();
-        this.addDrawableChild(hotkeyButton);
+        this.addDrawableChild(configHotkeyButton);
+
+        entityInfoScreenButton = ButtonWidget.builder(
+                        Text.literal("Entity Info Screen Hotkey: " +KeyBindingHandler.getEntityConfigKeyBinding().getBoundKeyLocalizedText().getString()),
+                        button -> {
+                            if (!waitingForKeyInput) {
+                                waitingForKeyInput = true;
+                                waitingButtonType = ButtonType.ENTITY_INFO_HOTKEY;
+                                updateButtonTexts();
+                            }
+                        })
+                .dimensions(centerX - buttonWidth/2, startY + spacing * 3, buttonWidth, buttonHeight)
+                .build();
+        this.addDrawableChild(entityInfoScreenButton);
 
         // Done button
         doneButton = ButtonWidget.builder(
@@ -96,8 +120,24 @@ public class ConfigScreen extends Screen {
         if (waitingForKeyInput) {
             // Don't allow escape key as hotkey
             if (keyCode != 256) { // 256 is escape key
-                KeyBindingHandler.updateConfigKeyBinding(keyCode);
+                // Handle the key binding based on which button was clicked
+                switch (waitingButtonType) {
+                    case CONFIG_HOTKEY:
+                        KeyBindingHandler.updateConfigKeyBinding(keyCode);
+                        break;
+                    case ENTITY_INFO_HOTKEY:
+                        KeyBindingHandler.updateEntityConfigKeyBinding(keyCode);
+                        break;
+                }
+
                 waitingForKeyInput = false;
+                waitingButtonType = ButtonType.NONE;
+                updateButtonTexts();
+                return true;
+            } else {
+                // ESC pressed - cancel key input
+                waitingForKeyInput = false;
+                waitingButtonType = ButtonType.NONE;
                 updateButtonTexts();
                 return true;
             }
@@ -121,12 +161,22 @@ public class ConfigScreen extends Screen {
             );
         }
 
-        if (hotkeyButton != null) {
-            if (waitingForKeyInput) {
-                hotkeyButton.setMessage(Text.literal("Press any key...").formatted(Formatting.YELLOW));
+        if (configHotkeyButton != null) {
+            if (waitingForKeyInput && waitingButtonType == ButtonType.CONFIG_HOTKEY) {
+                configHotkeyButton.setMessage(Text.literal("Press any key...").formatted(Formatting.YELLOW));
             } else {
-                hotkeyButton.setMessage(
+                configHotkeyButton.setMessage(
                         Text.literal("Config Hotkey: " + KeyBindingHandler.getConfigKeyBinding().getBoundKeyLocalizedText().getString())
+                );
+            }
+        }
+
+        if (entityInfoScreenButton != null) {
+            if (waitingForKeyInput && waitingButtonType == ButtonType.ENTITY_INFO_HOTKEY) {
+                entityInfoScreenButton.setMessage(Text.literal("Press any key...").formatted(Formatting.YELLOW));
+            } else {
+                entityInfoScreenButton.setMessage(
+                        Text.literal("Entity Info Screen Hotkey: " + KeyBindingHandler.getEntityConfigKeyBinding().getBoundKeyLocalizedText().getString())
                 );
             }
         }
