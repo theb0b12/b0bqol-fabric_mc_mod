@@ -156,7 +156,7 @@ public class EntityInfoScreen extends Screen {
         ENTITY_CONFIG.put("strider_on_strider_on_strider", new EntityData("strider on strider on strider", 5.287500143, 0.1875));
 
 
-        // Add more entities as needed
+        // Add more entities as they come out
     }
 
     public EntityInfoScreen(Text title) {
