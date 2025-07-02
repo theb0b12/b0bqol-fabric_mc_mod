@@ -12,14 +12,7 @@ public class B0bqol implements ModInitializer{
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
-	public void onInitialize() {
-		LOGGER.info("Initializing B0bqol mod for Minecraft 1.21.3...");
-		
-		// Initialize all features
-
-		
-		LOGGER.info("B0bqol mod fully loaded! All features active.");
-	}
+	public void onInitialize() {}
 
 }
 	

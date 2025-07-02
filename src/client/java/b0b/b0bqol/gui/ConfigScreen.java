@@ -1,24 +1,25 @@
 package b0b.b0bqol.gui;
 
+import b0b.b0bqol.features.Feature;
+import b0b.b0bqol.features.Features;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.HashMap;
 
 public class ConfigScreen extends Screen {
 
     private final Screen parent;
-    private ButtonWidget AutoDownwardHopperButton;
-    private ButtonWidget AutoTopSlabButton;
+
     private ButtonWidget configHotkeyButton;
     private ButtonWidget entityInfoScreenButton;
-    private ButtonWidget doneButton;
 
-    // Config values - you might want to move these to a separate config class
-    public static boolean AutoDownwardHopperEnabled = true;
-    public static boolean AutoTopSlabEnabled = true;
+    private final HashMap<Feature, ButtonWidget> booleanButtons = new HashMap<>();
 
     // Track which button is waiting for input
     private boolean waitingForKeyInput = false;
@@ -53,31 +54,19 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(new TextWidget(centerX - 50, startY - 30, 100, 20,
                 Text.literal("Mod Configuration").formatted(Formatting.WHITE), this.textRenderer));
 
-        // AutoDownwardHopper toggle
-        AutoDownwardHopperButton = ButtonWidget.builder(
-                        Text.literal("Auto Downward Hopper: " + (AutoDownwardHopperEnabled ? "ON" : "OFF"))
-                                .formatted(AutoDownwardHopperEnabled ? Formatting.GREEN : Formatting.RED),
-                        button -> {
-                            AutoDownwardHopperEnabled = !AutoDownwardHopperEnabled;
-                            updateButtonTexts();
-                            // Save config here if you have a config system
-                        })
-                .dimensions(centerX - buttonWidth/2, startY, buttonWidth, buttonHeight)
-                .build();
-        this.addDrawableChild(AutoDownwardHopperButton);
-
-        // AutoTopSlab toggle
-        AutoTopSlabButton = ButtonWidget.builder(
-                        Text.literal("Auto Top Slab: " + (AutoTopSlabEnabled ? "ON" : "OFF"))
-                                .formatted(AutoTopSlabEnabled ? Formatting.GREEN : Formatting.RED),
-                        button -> {
-                            AutoTopSlabEnabled = !AutoTopSlabEnabled;
-                            updateButtonTexts();
-                            // Save config here if you have a config system
-                        })
-                .dimensions(centerX - buttonWidth/2, startY + spacing, buttonWidth, buttonHeight)
-                .build();
-        this.addDrawableChild(AutoTopSlabButton);
+        for (int i = 0; i < Features.features.size(); i++) {
+            var f = Features.features.get(i);
+            var button = ButtonWidget.builder(
+                    Text.literal(f.name + ": " + (f.getState() ? "ON" : "OFF"))
+                            .formatted(f.getState() ? Formatting.GREEN : Formatting.RED),
+                    onPress -> {
+                        f.setState(!f.getState());
+                        updateButtons();
+                    }
+            ).dimensions(centerX - buttonWidth / 2, startY + (i * spacing), buttonWidth, buttonHeight).build();
+            this.addDrawableChild(button);
+            booleanButtons.put(f, button);
+        }
 
         // Hotkey change button
         configHotkeyButton = ButtonWidget.builder(
@@ -107,20 +96,17 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(entityInfoScreenButton);
 
         // Done button
-        doneButton = ButtonWidget.builder(
+        this.addDrawableChild(ButtonWidget.builder(
                         Text.literal("Done"),
                         button -> this.close())
                 .dimensions(centerX - 50, startY + spacing * 4, 100, buttonHeight)
-                .build();
-        this.addDrawableChild(doneButton);
+                .build());
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (waitingForKeyInput) {
-            // Don't allow escape key as hotkey
-            if (keyCode != 256) { // 256 is escape key
-                // Handle the key binding based on which button was clicked
+            if (keyCode != GLFW.GLFW_KEY_ESCAPE) {
                 switch (waitingButtonType) {
                     case CONFIG_HOTKEY:
                         KeyBindingHandler.updateConfigKeyBinding(keyCode);
@@ -130,37 +116,23 @@ public class ConfigScreen extends Screen {
                         break;
                 }
 
-                waitingForKeyInput = false;
-                waitingButtonType = ButtonType.NONE;
-                updateButtonTexts();
-                return true;
-            } else {
-                // ESC pressed - cancel key input
-                waitingForKeyInput = false;
-                waitingButtonType = ButtonType.NONE;
-                updateButtonTexts();
-                return true;
             }
+            waitingForKeyInput = false;
+            waitingButtonType = ButtonType.NONE;
+            updateButtonTexts();
+            return true;
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    private void updateButtons() {
+        booleanButtons.forEach((f, b) ->
+                b.setMessage(Text.literal(f.name + ": " + (f.getState() ? "ON" : "OFF"))
+                .formatted(f.getState() ? Formatting.GREEN : Formatting.RED)));
+    }
+
     private void updateButtonTexts() {
-        if (AutoDownwardHopperButton != null) {
-            AutoDownwardHopperButton.setMessage(
-                    Text.literal("Auto Downward Hopper: " + (AutoDownwardHopperEnabled ? "ON" : "OFF"))
-                            .formatted(AutoDownwardHopperEnabled ? Formatting.GREEN : Formatting.RED)
-            );
-        }
-
-        if (AutoTopSlabButton != null) {
-            AutoTopSlabButton.setMessage(
-                    Text.literal("Auto Top Slab: " + (AutoTopSlabEnabled ? "ON" : "OFF"))
-                            .formatted(AutoTopSlabEnabled ? Formatting.GREEN : Formatting.RED)
-            );
-        }
-
         if (configHotkeyButton != null) {
             if (waitingForKeyInput && waitingButtonType == ButtonType.CONFIG_HOTKEY) {
                 configHotkeyButton.setMessage(Text.literal("Press any key...").formatted(Formatting.YELLOW));

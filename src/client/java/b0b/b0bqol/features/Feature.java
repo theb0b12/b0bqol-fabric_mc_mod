@@ -1,15 +1,21 @@
 package b0b.b0bqol.features;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+public abstract class Feature {
 
-public class Feature {
-    public boolean interacted;
-    public MinecraftClient mc = MinecraftClient.getInstance();
-    
-    public void onInteractBlock(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir){}
+    private boolean state = false;
+
+    public String name;
+
+    public Feature(String name) {
+        this.name = name;
+    }
+
+    public Feature setState(boolean s) {
+        this.state = s;
+        return this;
+    }
+    public boolean getState() {
+        return this.state;
+    }
+
 }
