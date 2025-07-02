@@ -1,11 +1,11 @@
 {
-	"required": true,
-	"package": "b0b.b0bqol.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-		"InteractionManagerMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "b0b.b0bqol.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MixinMinecraftClient"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
