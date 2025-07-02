@@ -20,9 +20,6 @@
 		],
 		"client": [
 			"b0b.b0bqol.B0bqolClient"
-		],
-		"fabric-datagen": [
-			"b0b.b0bqol.B0bqolDataGenerator"
 		]
 	},
 	"mixins": [
