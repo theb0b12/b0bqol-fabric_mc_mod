@@ -1,6 +1,6 @@
 package b0b.b0bqol;
 
-import b0b.b0bqol.features.Feature;
+import b0b.b0bqol.features.ClientFeature;
 import b0b.b0bqol.features.Features;
 import b0b.b0bqol.gui.KeyBindingHandler;
 import b0b.b0bqol.features.AutoDownwardHopper;

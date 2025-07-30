@@ -1,6 +1,6 @@
 package b0b.b0bqol.gui;
 
-import b0b.b0bqol.features.Feature;
+import b0b.b0bqol.features.ClientFeature;
 import b0b.b0bqol.features.Features;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,7 +19,7 @@ public class ConfigScreen extends Screen {
     private ButtonWidget configHotkeyButton;
     private ButtonWidget entityInfoScreenButton;
 
-    private final HashMap<Feature, ButtonWidget> booleanButtons = new HashMap<>();
+    private final HashMap<ClientFeature, ButtonWidget> booleanButtons = new HashMap<>();
 
     // Track which button is waiting for input
     private boolean waitingForKeyInput = false;

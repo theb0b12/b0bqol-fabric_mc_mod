@@ -1,16 +1,16 @@
 package b0b.b0bqol.features;
 
-public abstract class Feature {
+public abstract class ClientFeature {
 
     private boolean state = false;
 
     public String name;
 
-    public Feature(String name) {
+    public ClientFeature(String name) {
         this.name = name;
     }
 
-    public Feature setState(boolean s) {
+    public ClientFeature setState(boolean s) {
         this.state = s;
         return this;
     }
@@ -18,4 +18,6 @@ public abstract class Feature {
         return this.state;
     }
 
+
+    
 }
