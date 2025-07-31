@@ -51,7 +51,7 @@ public class PlacementHandler {
             Direction side,
             Vec3d hitVec,
             Hand hand) {
-        // You should probably handle these inside of AutoDownwardHopper.java nad AutoTopSlab.java
+        // You should probably handle these inside of AutoDownwardHopper.java and AutoTopSlab.java
         BlockHitResult hitResult = new BlockHitResult(hitVec, side, pos, false);
         ItemPlacementContext ctx = new ItemPlacementContext(new ItemUsageContext(player, hand, hitResult));
         BlockPos newPos = getPlacementPositionForTargetedPosition(player.clientWorld, pos,
