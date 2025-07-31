@@ -1,5 +1,6 @@
 package b0b.b0bqol.mixin.client;
 
+import b0b.b0bqol.features.Features;
 import b0b.b0bqol.features.PlacementHandler;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -30,7 +31,9 @@ public class MixinMinecraftClient {
             Hand hand,
             BlockHitResult hitResult,
             Operation<ActionResult> original) {
-        return PlacementHandler.handlePlaceBlock(instance, player, hand, hitResult);
+        if (Features.AUTO_DOWNWARD_HOPPER.shouldModify(player) || Features.AUTO_TOP_SLAB.shouldModify(player))
+            return PlacementHandler.handlePlaceBlock(instance, player, hand, hitResult);
+        return original.call(instance, player, hand, hitResult);
     }
 
 }
