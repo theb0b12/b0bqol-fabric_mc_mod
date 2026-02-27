@@ -1,0 +1,1 @@
+- Made in all or some part from both ChatGPT 5.2 and or Cladue Sonnet 4.6
