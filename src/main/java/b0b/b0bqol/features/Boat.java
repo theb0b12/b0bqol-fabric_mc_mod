@@ -65,7 +65,7 @@ public class Boat extends MainFeature {
     public void list(ServerPlayerEntity player) {
         if (player != null) {
             player.sendMessage(Text.literal("§6Available boat types:"), false);
-            player.sendMessage(Text.literal("§7bb - spawns normal BOAT on stack Furnace MCs"), false);
+            player.sendMessage(Text.literal("§7bb - spawns normal BOAT on stacked Furnace MCs"), false);
         }
     }
 }
